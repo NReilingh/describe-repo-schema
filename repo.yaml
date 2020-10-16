@@ -1,0 +1,10 @@
+# Go to https://repo.tools/yaml or something I don't know
+
+version: 0.1
+
+provides:
+  json-schema: schema.json
+
+test:
+  validate-schema: npx run schema-validate
+  - requires: npm
