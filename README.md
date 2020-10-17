@@ -13,7 +13,13 @@ or retrieve those artifacts.
 If a repo "provides" an artifact, it means that objects inside the repo
 can be executed, compiled, or referenced directly to produce
 some kind of artifact that could be consumed by or executed on
-a different system.
+a different system or project.
+Any scripts or configuration files provided for tools to operate
+on the repo for purposes of testing or validation,
+but that do not directly provide an exportable artifact
+are also listed with their external dependencies.
+Any environment variables required for a build or script to run
+are also specified.
 
 The existence of a `repo.yaml` file in the repo root directory indicates
 that the repo provides a `repo.yaml` file.
