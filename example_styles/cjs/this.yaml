@@ -1,6 +1,6 @@
 # Go to https://repo.tools/yaml or something I don't know
 
-version: 0.1
+version: 0.1:cjs
 
 exports:
   - json-schema: schema.json
@@ -10,6 +10,8 @@ scripts:
     validate-schema: npx run schema-validate
     requires:
       - npm
+
+---
 
 npm:
   href: https://npmjs.org/ # or whatever it is
