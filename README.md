@@ -55,7 +55,8 @@ This description would thus be machine readable,
 though human developers would remain the target demographic for readability.
 This description, by convention, would be contained in a `repo.<ext>` file
 at the root of a repository,
-in a human-friendly format like YAML or JSON (or perhaps Cue).
+in a human-friendly format like [YAML](https://yaml.org)
+or [JSON](https://www.json.org) (or perhaps [Cue](https://cuelang.org)).
 
 In order to fulfill the purpose of reducing drag for engineers working across
 different tech stacks, this DSL must be completely independent
@@ -68,6 +69,32 @@ yet still provide enough utility and improvement
 in developer ergonomics across any type of project
 that the `repo.yaml` or `repo.cue` file would be just as useful
 to a repository as a README file (if not more so).
+
+### By Example
+
+What could this look like?
+
+Let's imagine a repo that uses a static site generator to build a static web site:
+
+```yaml
+provides:
+  - path: dist/
+    description: static web resources
+    build:
+      consumes: npm
+      script:
+        - npm install
+        - npm run build
+      environment:
+        - AWS_ACCESS_KEY_ID
+        - AWS_SECRET_ACCESS_KEY
+  - path: netlify.toml
+    description: CI/CD Configuration
+    expects:
+      environment:
+        - AWS_ACCESS_KEY_ID
+        - AWS_SECRET_ACCESS_KEY
+```
 
 ## Why Would This Be Useful?
 
