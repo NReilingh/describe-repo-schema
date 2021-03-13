@@ -152,3 +152,34 @@ technology-specific chunks of scaffold.
 I am not sure that anything like this exists to date.
 Yeoman offers some utility as a scaffolding generator,
 but it is more of a templating system than a scaffold composition tool.
+
+## Everything Sucks, Let's Brainstorm
+
+Provides: Things that the repo's content provides as outputs to the world.
+Generator: when the repo does not provide the output statically,
+but builds it dynamically from some kind of procedure that may require inputs.
+Consumes: what a generator requires as input.
+Expects: what a provided executable file might be designed to recieve as input.
+
+This actually _does_ kind of work,
+since the one kind of opinionation we should have here
+is that parts of the repo that receive input
+or are output to by a generator
+are in the gitignore space.
+
+We can say that an output FileType has targets for what it is intended
+to be consumed by. These external factors (#Platform and #Consumer)
+are also treated as generator inputs.
+
+Things are making sense, then.
+What's next is to figure out how to describe generic functions.
+Are they the same as generators? Very similar, to be sure.
+The problem is I'm not sure where to put them... yet.
+Do they have the same type signature?
+Is a build the same thing as a generic executable procedure?
+I think we can define a build and a script both as a type of command.
+Or build and command as a type of script.
+
+Okay so the types here are a bit confusing, but the main problem is still
+what do we _call it_ when it is some kind of function run on the repo itself,
+and where do we locate it in the file?

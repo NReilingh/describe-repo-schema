@@ -1,8 +1,5 @@
-#FileType: {
-  executable?: bool
-  expects?: [...#Input]
-  ...
-}
+provides: [...#Output]
+runs: [...#Execution]
 
 #Output: #FileType & {
   path?: string
@@ -10,26 +7,50 @@
   from?: #Generator
 }
 
-#Generator: {
+#FileType: #ExecutableFile | *#StaticFile
+#FileType: {
+  executable: bool
+  targets?: #Platform | #Consumer
+  ...
+}
+#ExecutableFile: {
+  executable: true
+  expects?: [...#Input]
+  ...
+}
+#StaticFile: {
+  executable: false
+  ...
+}
+
+#Execution: {
+  description?: string
+  shell: #Script,
   consumes?: [...#Input]
-  build: [...string]
 }
 
-// yeah I have no idea.
-#Need: {
-  path: #RepoPath
+#Generator: {
+  build: #Script
+  consumes?: [...#Input]
 }
 
-#Input: #RepoPath | #EnvironmentResource | #EnvironmentVars
+#Script: [...string]
 
-#RepoPath: #Output | {
-  path?: string
+#Input: #ExternalType
+#ExternalType: #Platform | #Consumer | #Path | #Environment | #Tool | string
+
+// A special kind of consumer that consumes compiled binaries
+#Platform: "x86-64_linux" | "arm64_darwin" | string
+
+// Path means specifically a file path relative to the repo root.
+// May not be absolute.
+#Path: {
+  path: =~ "^[^/\\]"
 }
-#EnvironmentResource: string
-#EnvironmentVars: {
+
+#Environment: {
   env?: [...string]
 }
 
-#Type: #Build | #Deployment | *#Asset
-
-provides: [...#Output]
+#Consumer: string
+#Tool: string
