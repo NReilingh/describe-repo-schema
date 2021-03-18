@@ -1,11 +1,17 @@
-provides: [...#Output]
-runs: [...#Execution]
+import "list"
+
+provides: list.MinItems(1) & [...#Product] | #Product
+runs?: [...#Execution] | #Execution
+
+#Product: #Output | #Source
 
 #Output: #FileType & {
-  path?: string
+  path?: #Path
   description?: string
   from?: #Generator
 }
+
+#Source: #FileType | #Path
 
 #FileType: #ExecutableFile | *#StaticFile
 #FileType: {
@@ -31,6 +37,7 @@ runs: [...#Execution]
 
 #Generator: {
   build: #Script
+  source?: [...#Path]
   consumes?: [...#Input]
 }
 
@@ -44,9 +51,9 @@ runs: [...#Execution]
 
 // Path means specifically a file path relative to the repo root.
 // May not be absolute.
-#Path: {
-  path: =~ "^[^/\\]"
-}
+#Path: =~ "^[^/\\\\]"
+// This is a JSON-like string syntax, so quad-backslashes are required
+// in order to have one escaped backslash in the regex.
 
 #Environment: {
   env?: [...string]
