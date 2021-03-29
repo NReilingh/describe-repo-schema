@@ -80,18 +80,19 @@ Let's imagine a repo that uses a static site generator to build a static web sit
 provides:
   - path: dist/
     description: static web resources
-    build:
-      consumes: npm
-      script:
+    from:
+      build:
         - npm install
         - npm run build
-      environment:
-        - AWS_ACCESS_KEY_ID
-        - AWS_SECRET_ACCESS_KEY
+      consumes:
+        - npm
+        - env:
+          - AWS_ACCESS_KEY_ID
+          - AWS_SECRET_ACCESS_KEY
   - path: netlify.toml
     description: CI/CD Configuration
     expects:
-      environment:
+      env:
         - AWS_ACCESS_KEY_ID
         - AWS_SECRET_ACCESS_KEY
 ```
