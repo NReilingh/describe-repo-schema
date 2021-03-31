@@ -14,12 +14,18 @@ provides: {
 runs: [
   {
     description: "Validate Self"
-    shell: "cue vet schema.cue repo.cue -v -c"
+    script: "cue vet schema.cue repo.cue -v -c"
     consumes: #CUE
   },
   {
     description: "Export Self"
-    shell: "cue export schema.cue repo.cue"
+    script: "cue export schema.cue repo.cue"
     consumes: #CUE
+  },
+  {
+    description: "Test Examples"
+    script: "./test.sh"
+    consumes: #CUE
+    yields: stream: "stdout"
   }
 ]
