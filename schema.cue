@@ -9,6 +9,9 @@ provides: [#Product, ...#Product] | #Product
 // They do NOT directly output the repo's products.
 runs?: [...#Execution] | #Execution
 
+// Global consumes -- where to define dependencies for all builds from this repo
+consumes?: #Inputs
+
 // =============================================================================
 
 // A product is defined in terms of a relative path under the root of the repo.
@@ -27,16 +30,16 @@ runs?: [...#Execution] | #Execution
 // For convenience, non-generated sources can be specified as a simple #Path
 // instead of a full #ContentType type.
 #Sources: [...#Source] | #Source
-#Source: #TrackedContent | #Path
+#Source: #TrackedContent
 
 // We specify two subtypes of #ContentType
 // depending on whether the content is tracked.
 #TrackedContent: #ContentType & {
   tracked: true
-}
+} | #Path
 #UntrackedContent: #ContentType & {
   tracked: false
-}
+} | #Path
 
 // =============================================================================
 
@@ -109,7 +112,7 @@ runs?: [...#Execution] | #Execution
 
 // An environment spec can be implicit as a sub-array,
 // or explicit as a value of `env:`.
-#Environment: {
+#Environment: *{
   env: [#EnvVar, ...#EnvVar] | #EnvVar
 } | [#EnvVar, ...#EnvVar]
 

@@ -1,7 +1,7 @@
 // https://github.com/NReilingh/describe-repo-schema
 
 #CUE: {
-  description: "cue",
+  description: "cue"
   ref: "https://cuelang.org"
 }
 
