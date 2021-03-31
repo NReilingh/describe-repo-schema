@@ -73,6 +73,12 @@ runs?: [...#Execution] | #Execution
 
 // =============================================================================
 
+// Inputs and Consumers are both external types.
+// An input can also be the environment.
+#Inputs: *[...#Input] | #Input
+#Input: #ExternalType | #UntrackedContent | #Environment
+#Consumer: #ExternalType
+
 // DataType is extremely generic and is used to add additional context
 // and requirements to any data object referenced,
 // whether it be a tracked file, untracked file, or stream.
@@ -93,19 +99,6 @@ runs?: [...#Execution] | #Execution
   tracked: bool
 }
 
-// Path means specifically a file path relative to the repo root.
-// May not be absolute.
-#Path: =~ "^[^/\\\\]"
-// This is a JSON-like string syntax, so quad-backslashes are required
-// in order to have one escaped backslash in the regex.
-#Url: =~ "^[a-z][a-z0-9.+-]*:\\S+"
-
-// Inputs and Consumers are both external types.
-// An input can also be the environment.
-#Inputs: *[...#Input] | #Input
-#Input: #ExternalType | #UntrackedContent | #Environment
-#Consumer: #ExternalType
-
 // External types are not strictly defined
 // so the type is open and can also just be a string.
 #ExternalType: {
@@ -117,7 +110,7 @@ runs?: [...#Execution] | #Execution
 // An environment spec can be implicit as a sub-array,
 // or explicit as a value of `env:`.
 #Environment: {
-  env: [#EnvVar, ...#EnvVar]
+  env: [#EnvVar, ...#EnvVar] | #EnvVar
 } | [#EnvVar, ...#EnvVar]
 
 // The var itself can be defined as a string,
@@ -127,6 +120,13 @@ runs?: [...#Execution] | #Execution
   description?: string
   ...
 } | string
+
+// Path means specifically a file path relative to the repo root.
+// May not be absolute.
+#Path: =~ "^[^/\\\\]"
+// This is a JSON-like string syntax, so quad-backslashes are required
+// in order to have one escaped backslash in the regex.
+#Url: =~ "^[a-z][a-z0-9.+-]*:\\S+"
 
 // A shell script or build script is simply an example of what you would enter
 // at a command line prompt in order to generate the
