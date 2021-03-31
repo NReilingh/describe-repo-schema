@@ -1,0 +1,8 @@
+# Only use spaces to indent your .yml configuration.
+
+pipelines:
+  default:
+    - step:
+      name: Integration Tests
+      script:
+        - ./test.sh
