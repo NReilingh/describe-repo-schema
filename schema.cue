@@ -10,7 +10,7 @@ provides: [#Product, ...#Product] | #Product
 runs?: [...#Execution] | #Execution
 
 // Global consumes -- where to define dependencies for all builds from this repo
-consumes?: #Inputs
+consumes?: #GlobalInputs
 
 // =============================================================================
 
@@ -69,7 +69,7 @@ consumes?: #Inputs
 
 // An OutputType yielded from an execution can also be a stream,
 // for example, TAP (Test Anything Protocol) on stdout.
-#OutputType: #UntrackedContent | #Stream
+#OutputType: #UntrackedContent | *#Stream
 #Stream: #DataType & {
   stream: "stdout" | "stderr" | *true
 }
@@ -78,8 +78,10 @@ consumes?: #Inputs
 
 // Inputs and Consumers are both external types.
 // An input can also be the environment.
+#GlobalInputs: *[...#GlobalInput] | #GlobalInput
+#GlobalInput: #ExternalType | #Environment | #Setup
 #Inputs: *[...#Input] | #Input
-#Input: #ExternalType | #UntrackedContent | #Environment | *#Setup
+#Input: #ExternalType | #Environment | #UntrackedContent
 #Consumer: #ExternalType
 #Setup: {
   setup: #Execution
@@ -102,6 +104,7 @@ consumes?: #Inputs
 #ContentType: #DataType & {
   path: #Path
   tracked: bool
+  ...
 }
 
 // External types are not strictly defined
@@ -109,7 +112,7 @@ consumes?: #Inputs
 #ExternalType: {
   description?: string
   ref?: #Url
-  ...
+  exec?: string
 } | string
 
 // An environment spec can be implicit as a sub-array,

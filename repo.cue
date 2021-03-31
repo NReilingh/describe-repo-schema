@@ -5,11 +5,17 @@
   ref: "https://cuelang.org"
 }
 
-provides: {
-  path: "schema.cue"
-  description: "Schema Definition"
-  targets: #CUE
-}
+provides: [
+  {
+    path: "schema.cue"
+    description: "Schema Definition"
+    targets: #CUE
+  },
+  {
+    path: "bitbucket-pipelines.yml"
+    target: "Bitbucket Pipelines"
+  }
+]
 
 runs: [
   {

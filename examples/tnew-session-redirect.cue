@@ -51,7 +51,7 @@ provides: [
 runs: [
   {
     description: "Run local dev server"
-    shell: [
+    script: [
       "npm install",
       "npm run build",
       "npm run test:watch",
@@ -61,7 +61,7 @@ runs: [
   },
   {
     description: "Run unit tests"
-    shell: [
+    script: [
       "npm install",
       "npm run build",
       "npm run test"
