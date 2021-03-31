@@ -60,7 +60,7 @@ consumes?: #Inputs
 // except with different nomenclature for the Script type property,
 // and additional properties available for description and yields.
 #Execution: {
-  shell: #Script,
+  script: #Script,
   description?: string
   source?: #Sources
   consumes?: #Inputs
@@ -79,9 +79,11 @@ consumes?: #Inputs
 // Inputs and Consumers are both external types.
 // An input can also be the environment.
 #Inputs: *[...#Input] | #Input
-#Input: #ExternalType | #UntrackedContent | #Environment
+#Input: #ExternalType | #UntrackedContent | #Environment | *#Setup
 #Consumer: #ExternalType
-
+#Setup: {
+  setup: #Execution
+}
 // DataType is extremely generic and is used to add additional context
 // and requirements to any data object referenced,
 // whether it be a tracked file, untracked file, or stream.
