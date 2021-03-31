@@ -1,6 +1,7 @@
 // Provided products are the content that a repo is initialized to track.
 // (See `$ man git` -- "the stupid content tracker")
 // At least one product must be specified to be valid.
+// In the "repo as pure function" metaphor, Products are the "output".
 provides: [#Product, ...#Product] | #Product
 
 // Executions output artifacts that are internal to the repo.
@@ -82,6 +83,7 @@ runs?: [...#Execution] | #Execution
   description?: string
   expects?: #Inputs
   targets?: [...#Consumer] | #Consumer
+  ref?: #Url
   ...
 }
 
@@ -96,6 +98,7 @@ runs?: [...#Execution] | #Execution
 #Path: =~ "^[^/\\\\]"
 // This is a JSON-like string syntax, so quad-backslashes are required
 // in order to have one escaped backslash in the regex.
+#Url: =~ "^[a-z][a-z0-9.+-]*:\\S+"
 
 // Inputs and Consumers are both external types.
 // An input can also be the environment.
@@ -107,6 +110,7 @@ runs?: [...#Execution] | #Execution
 // so the type is open and can also just be a string.
 #ExternalType: {
   description?: string
+  ref?: #Url
   ...
 } | string
 

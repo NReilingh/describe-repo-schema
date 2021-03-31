@@ -1,24 +1,26 @@
+// https://github.com/NReilingh/describe-repo-schema
+
+#CUE: {
+  description: "cue",
+  ref: "https://cuelang.org"
+}
+
 provides: [
   {
     path: "schema.cue"
     description: "Schema Definition"
-    targets: "cue"
-  },
-  {
-    path: "bitbucket-pipelines.yml"
-    description: "CI Configuration"
-    targets: "Bitbucket Pipelines"
+    targets: #CUE
   }
 ]
 runs: [
   {
-    description: "Validation Example"
-    shell: "cue vet schema/main.cue repo.cue -v"
-    consumes: "cue"
+    description: "Validate Self"
+    shell: "cue vet schema.cue repo.cue -v -c"
+    consumes: #CUE
   },
   {
-    description: "Evaluation Example"
-    shell: "cue export schema/main.cue repo.cue"
-    consumes: "cue"
+    description: "Export Self"
+    shell: "cue export schema.cue repo.cue"
+    consumes: #CUE
   }
 ]
