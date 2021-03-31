@@ -5,13 +5,12 @@
   ref: "https://cuelang.org"
 }
 
-provides: [
-  {
-    path: "schema.cue"
-    description: "Schema Definition"
-    targets: #CUE
-  }
-]
+provides: {
+  path: "schema.cue"
+  description: "Schema Definition"
+  targets: #CUE
+}
+
 runs: [
   {
     description: "Validate Self"
