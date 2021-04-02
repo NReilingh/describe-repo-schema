@@ -19,7 +19,7 @@ jobs:
 
       - name: Run test
         run: |
-          wget -O https://github.com/cuelang/cue/releases/download/v0.3.0-beta.8/cue_v0.3.0-beta.8_linux_arm64.tar.gz
+          wget "https://github.com/cuelang/cue/releases/download/v0.3.0-beta.8/cue_v0.3.0-beta.8_linux_arm64.tar.gz"
           tar xzf cue_v0.3.0-beta.8_linux_arm64.tar.gz
           export PATH=$(pwd)/cue_v0.3.0-beta.8_linux_arm64:$PATH
           ./test.sh
