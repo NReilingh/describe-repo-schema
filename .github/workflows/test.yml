@@ -16,11 +16,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-
+      - name: Install CUE
+        run: brew install cuelang/tap/cue
       - name: Run test
-        run: |
-          wget "https://github.com/cuelang/cue/releases/download/v0.3.0-beta.8/cue_v0.3.0-beta.8_linux_arm64.tar.gz"
-          tar xvzf cue_v0.3.0-beta.8_linux_arm64.tar.gz
-          export PATH=$(pwd):$PATH
-          echo $PATH
-          ./test.sh
+        run: ./test.sh
