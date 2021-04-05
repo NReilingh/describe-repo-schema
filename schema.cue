@@ -81,7 +81,7 @@ consumes?: #GlobalInputs
 #GlobalInputs: *[...#GlobalInput] | #GlobalInput
 #GlobalInput: #ExternalType | #Environment | #Setup
 #Inputs: *[...#Input] | #Input
-#Input: #ExternalType | #Environment | #UntrackedContent
+#Input: *#ExternalType | *#Environment | #UntrackedContent
 #Consumer: #ExternalType
 #Setup: {
   setup: #Execution

@@ -1,6 +1,6 @@
 // https://github.com/NReilingh/describe-repo-schema
 
-#CUE: {
+let CUE = {
   description: "cue"
   ref: "https://cuelang.org"
 }
@@ -9,7 +9,7 @@ provides: [
   {
     path: "schema.cue"
     description: "Schema Definition"
-    targets: #CUE
+    targets: CUE
   },
   {
     path: "bitbucket-pipelines.yml"
@@ -21,17 +21,17 @@ runs: [
   {
     description: "Validate Self"
     script: "cue vet schema.cue repo.cue -v -c"
-    consumes: #CUE
+    consumes: CUE
   },
   {
     description: "Export Self"
     script: "cue export schema.cue repo.cue"
-    consumes: #CUE
+    consumes: CUE
   },
   {
     description: "Test Examples"
     script: "./test.sh"
-    consumes: #CUE
+    consumes: CUE
     yields: stream: "stdout"
   }
 ]

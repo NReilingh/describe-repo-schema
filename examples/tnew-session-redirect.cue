@@ -7,13 +7,13 @@ provides: [
       description: "Node.js"
       exec: "node start.js"
     }
-    expects: #RuntimeEnv
+    expects: RuntimeEnv
     from: {
       build: [
         "npm install",
         "npm run build"
       ]
-      consumes: #BuildEnv
+      consumes: BuildEnv
     }
   },
   {
@@ -21,14 +21,14 @@ provides: [
     targets: "Google App Engine"
     from: {
       build: "npx envsub app.tpl.yaml app.yaml"
-      consumes: #RuntimeEnv
+      consumes: RuntimeEnv
     }
   },
   {
     path: "bitbucket-pipelines.yml"
     targets: "Bitbucket Pipelines"
     expects: env:
-      #BuildEnv.env + #RuntimeEnv.env + [
+      BuildEnv.env + RuntimeEnv.env + [
         "SNYK_TOKEN",
         "GCP_KEY_FILE",
         "GCP_PROJECT"
@@ -36,17 +36,17 @@ provides: [
   }
 ]
 
-#BuildEnv: env: [
+let BuildEnv = { env: [
   "AIRTABLE_API_KEY",
   "AIRTABLE_BASE"
-]
+] }
 
-#RuntimeEnv: env: [
+let RuntimeEnv = { env: [
   "TNEW_DOMAIN",
   "V6_PROCEDURE_ID",
   "V6_VALIDATION_POINT",
   "V7_PROCEDURE_ID"
-]
+] }
 
 runs: [
   {
@@ -57,7 +57,7 @@ runs: [
       "npm run test:watch",
       "npm run start-dev"
     ]
-    consumes: env: #BuildEnv.env + #RuntimeEnv.env
+    consumes: env: BuildEnv.env + RuntimeEnv.env
   },
   {
     description: "Run unit tests"
@@ -67,7 +67,7 @@ runs: [
       "npm run test"
     ]
     source: "test/"
-    consumes: #BuildEnv
+    consumes: BuildEnv
     yields: "coverage/"
   }
 ]
