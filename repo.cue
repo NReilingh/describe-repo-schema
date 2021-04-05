@@ -29,9 +29,15 @@ runs: [
     consumes: CUE
   },
   {
-    description: "Test Examples"
-    script: "./test.sh"
-    consumes: CUE
+    description: "Validation Testing"
+    script: "shellspec"
+    consumes: [
+      CUE,
+      {
+        description: "ShellSpec",
+        ref: "https://shellspec.info"
+      }
+    ]
     yields: stream: "stdout"
   }
 ]
