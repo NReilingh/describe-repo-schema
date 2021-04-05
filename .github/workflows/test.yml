@@ -16,9 +16,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      - name: Install CUE
-        run: brew install cuelang/tap/cue
-      - name: Install ShellSpec
-        run: brew install shellspec/shellspec/shellspec
+      - name: Install CUE and ShellSpec
+        run: brew install cuelang/tap/cue shellspec/shellspec/shellspec
       - name: Run test
-        run: ./test.sh
+        run: shellspec --format tap
