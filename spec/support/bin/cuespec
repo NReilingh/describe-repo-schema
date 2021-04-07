@@ -1,0 +1,9 @@
+#!/bin/bash
+
+tmp="$(pwd)/spec/support/tmp"
+
+spec="${1//[^[:alnum:]-]/_}"
+
+cue eval schema.cue "$tmp/$spec.cue" -c -v > "$tmp/${spec}_result.cue"
+
+cue vet schema.cue "$tmp/${spec}_result.cue" "$tmp/${spec}_expected.cue" -c -v

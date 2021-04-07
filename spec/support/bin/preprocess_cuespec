@@ -1,0 +1,61 @@
+#!/bin/bash
+
+tmp="$(pwd)/spec/support/tmp"
+if [[ ! -d "$tmp" ]]; then
+  mkdir -p "$tmp"
+fi
+
+finishtest() {
+  if [[ $command == 'TEST' && $identflag == 'IDENTITY' ]]; then
+    cp $target_file "$tmp/${target_filename}_expected.cue"
+    echo "$targetname"
+  elif [[ $command == 'EXPECTS' ]]; then
+    # We may have also just finished a regular 2-part test
+    echo "$targetname"
+  fi
+}
+
+commentpattern="^//[[:space:]]+(TEST|EXPECTS)(([[:space:]]+(IDENTITY))?[[:space:]]+(.+))?"
+
+for cuespec in spec/**/*_spec.cue; do
+  # Get the name of this spec from filename
+  specname=${cuespec##*/}
+  specname=${specname%_spec.cue}
+  specname=${specname//_/ }
+
+  identflag=""
+
+  # Parse the spec file line-by-line
+  while read -r line; do
+    # Attempt to parse the current line as a keyword comment
+    if [[ $line =~ $commentpattern ]]; then
+      # If we are currently on a pattern comment, then we may have just
+      # completed an identity test that we need to finish before continuing.
+      finishtest
+
+      # Now we can save the results of the last parse
+      command=${BASH_REMATCH[1]}
+      identflag=${BASH_REMATCH[4]}
+      testname=${BASH_REMATCH[5]}
+
+      # Continuing, there are only two command options:
+      if [[ $command == 'TEST' ]]; then
+        # If we are defining a new test, set the target file and name variables
+        targetname="$specname $testname"
+        target_filename="${targetname//[^[:alnum:]-]/_}"
+        target_file="$tmp/$target_filename.cue"
+
+        find "$tmp" -name "$target_filename*" -delete
+      elif [[ $command == 'EXPECTS' ]]; then
+        # If this is an expects block, we just adjust the $target_file
+        target_file="$tmp/${target_filename}_expected.cue"
+      fi
+    elif [[ $target_file ]]; then
+      # if not a keyword comment, and we have a target_file, output the line
+      echo $line >> $target_file
+    fi
+  done < "$cuespec"
+
+  # End of file; if current test was identity, copy it to expected
+  finishtest
+done
