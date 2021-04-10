@@ -22,6 +22,7 @@ provides: {
   path: "dist/*"
   from: build: "make"
   tracked: false
+  _type: "Output"
 }
 
 // TEST array of structs
@@ -40,10 +41,12 @@ provides: [
     path: "dist/*"
     from: build: "make"
     tracked: false
+    _type: "Output"
   },
   {
     path: "index.html"
     tracked: true
+    _type: "Source"
   }
 ]
 
@@ -68,5 +71,6 @@ provides: [
     path: "dist/*"
     from: build: "make"
     tracked: false
+    _type: "Output"
   }
 ]

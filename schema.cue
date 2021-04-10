@@ -42,12 +42,21 @@ consumes?: #Inputs
 // depending on whether the content is tracked.
 #TrackedContent: #ContentType & {
   tracked: true
-  _type: "Source" | *"TrackedContent"
+  _type: string | *"TrackedContent"
 }
 
 #UntrackedContent: #ContentType & {
+  env?: _|_
   tracked: false
-  _type: "Output" | *"UntrackedContent"
+  _type: string | *"UntrackedContent"
+}
+// A ContentType describes a file that is found at a given Path.
+#ContentType: {
+  #DataType
+  path: #Path
+  tracked: bool
+  _type: string | *"ContentType"
+  ...
 }
 
 // =============================================================================
@@ -83,8 +92,10 @@ consumes?: #Inputs
 // for example, TAP (Test Anything Protocol) on stdout.
 #OutputType: #UntrackedContent | *#Stream | #Path
 
-#Stream: #DataType & {
+#Stream: {
+  #DataType
   stream: "stdout" | "stderr" | *true
+  _type: "Stream"
 }
 
 // =============================================================================
@@ -94,23 +105,28 @@ consumes?: #Inputs
 // #GlobalInputs: *[...#GlobalInput] | #GlobalInput
 // #GlobalInput:  #ExternalType | #Environment | #Setup
 #Inputs: [...#Input] | #Input
-#Input: #ExternalType | #Environment | #UntrackedContent
+#Input: *(#ExternalType | #Environment) | #UntrackedContent
 
 // External types are not strictly defined
 // so the type is open and can also just be a string.
 #ExternalType: {
+  path?: _|_
+  env?: _|_
   description?: string
   ref?:         #Url
   exec?:        string
   _type: "ExternalType"
+  ...
 } | string
 
 // An environment spec can be implicit as a sub-array,
 // or explicit as a value of `env:`.
-#Environment: *{
+#Environment: {
   env: [#EnvVar, ...#EnvVar] | #EnvVar
   _type: "Environment"
-} | [#EnvVar, ...#EnvVar]
+}
+// | [#EnvVar, ...#EnvVar]
+// Yeah, this probably won't ever work. Wish I could figure out why, though!
 
 // The var itself can be defined as a string,
 // or given a description and other properties.
@@ -121,7 +137,7 @@ consumes?: #Inputs
 } | string
 
 
-#Consumer:     #ExternalType
+#Consumer: #ExternalType
 #Setup: {
   setup: #Execution
 }
@@ -134,20 +150,10 @@ consumes?: #Inputs
 // This type is also left open for the user to add additional properties to.
 #DataType: {
   description?: string
-  expects?:     #Inputs
-  targets?:     [...#Consumer] | #Consumer
-  ref?:         #Url
-  ...
+  expects?: #Inputs
+  targets?: [...#Consumer] | #Consumer
+  ref?: #Url
 }
-
-// A ContentType describes a file that is found at a given Path.
-#ContentType: #DataType & {
-  path:    #Path
-  tracked: bool
-  ...
-}
-
-
 
 // Path means specifically a file path relative to the repo root.
 // May not be absolute.
