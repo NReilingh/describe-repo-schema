@@ -58,4 +58,6 @@ for cuespec in spec/**/*_spec.cue; do
 
   # End of file; if current test was identity, copy it to expected
   finishtest
+  # Reset $command
+  command=""
 done

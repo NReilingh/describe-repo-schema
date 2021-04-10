@@ -9,6 +9,7 @@ provides: {
 provides: {
   path: "index.html"
   tracked: true
+  _type: "Source"
 }
 
 // TEST single Output
@@ -23,7 +24,7 @@ provides: {
   tracked: false
 }
 
-// TEST IDENTITY array of structs
+// TEST array of structs
 provides: [
   {
     path: "dist/*"
@@ -60,7 +61,6 @@ provides: [
     from: build: "make"
   }
 ]
-
 // EXPECTS
 provides: [
   "index.html",

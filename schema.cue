@@ -10,7 +10,8 @@ provides: [#Product, ...#Product] | #Product
 runs?: [...#Execution] | #Execution
 
 // Global consumes -- where to define dependencies for all builds from this repo
-consumes?: #GlobalInputs
+// consumes?: #GlobalInputs
+consumes?: #Inputs
 
 // =============================================================================
 
@@ -25,23 +26,29 @@ consumes?: #GlobalInputs
 // for whom inputs and consumers can be defined.
 // Outputs are produced by a Generator.
 #Output: #UntrackedContent & {
-	from: #Generator
+  from: #Generator
+  _type: "Output"
 }
 
 // For convenience, non-generated sources can be specified as a simple #Path
 // instead of a full #ContentType type.
 #Sources: [...#Source] | #Source
-#Source:  #TrackedContent
+#Source: #TrackedContent & {
+  from?: _|_
+  _type: "Source"
+} | #Path
 
 // We specify two subtypes of #ContentType
 // depending on whether the content is tracked.
 #TrackedContent: #ContentType & {
-	tracked: true
-} | #Path
+  tracked: true
+  _type: "Source" | *"TrackedContent"
+}
 
 #UntrackedContent: #ContentType & {
-	tracked: false
-} | #Path
+  tracked: false
+  _type: "Output" | *"UntrackedContent"
+}
 
 // =============================================================================
 
@@ -54,41 +61,69 @@ consumes?: #GlobalInputs
 // Inputs consumed, in comparison, are not tracked content,
 // but can be nearly anything else.
 #Generator: {
-	build:     #Script
-	source?:   #Sources
-	consumes?: #Inputs
+  build:     #Script
+  source?:   #Sources
+  consumes?: #Inputs
+  _type: "Generator"
 }
 
 // Executions are basically the same,
 // except with different nomenclature for the Script type property,
 // and additional properties available for description and yields.
 #Execution: {
-	script:       #Script
-	description?: string
-	source?:      #Sources
-	consumes?:    #Inputs
-	yields?:      [...#OutputType] | #OutputType
+  script:       #Script
+  description?: string
+  source?:      #Sources
+  consumes?:    #Inputs
+  yields?:      [...#OutputType] | #OutputType
+  _type: "Execution"
 }
 
 // An OutputType yielded from an execution can also be a stream,
 // for example, TAP (Test Anything Protocol) on stdout.
-#OutputType: #UntrackedContent | *#Stream
+#OutputType: #UntrackedContent | *#Stream | #Path
 
 #Stream: #DataType & {
-	stream: "stdout" | "stderr" | *true
+  stream: "stdout" | "stderr" | *true
 }
 
 // =============================================================================
 
 // Inputs and Consumers are both external types.
 // An input can also be the environment.
-#GlobalInputs: *[...#GlobalInput] | #GlobalInput
-#GlobalInput:  #ExternalType | #Environment | #Setup
-#Inputs:       *[...#Input] | #Input
-#Input:        *#ExternalType | *#Environment | #UntrackedContent
+// #GlobalInputs: *[...#GlobalInput] | #GlobalInput
+// #GlobalInput:  #ExternalType | #Environment | #Setup
+#Inputs: [...#Input] | #Input
+#Input: #ExternalType | #Environment | #UntrackedContent
+
+// External types are not strictly defined
+// so the type is open and can also just be a string.
+#ExternalType: {
+  description?: string
+  ref?:         #Url
+  exec?:        string
+  _type: "ExternalType"
+} | string
+
+// An environment spec can be implicit as a sub-array,
+// or explicit as a value of `env:`.
+#Environment: *{
+  env: [#EnvVar, ...#EnvVar] | #EnvVar
+  _type: "Environment"
+} | [#EnvVar, ...#EnvVar]
+
+// The var itself can be defined as a string,
+// or given a description and other properties.
+#EnvVar: {
+  name:         string
+  description?: string
+  ...
+} | string
+
+
 #Consumer:     #ExternalType
 #Setup: {
-	setup: #Execution
+  setup: #Execution
 }
 
 // DataType is extremely generic and is used to add additional context
@@ -98,41 +133,21 @@ consumes?: #GlobalInputs
 // not just by what "file extension" it has (though this can also be described).
 // This type is also left open for the user to add additional properties to.
 #DataType: {
-	description?: string
-	expects?:     #Inputs
-	targets?:     [...#Consumer] | #Consumer
-	ref?:         #Url
-	...
+  description?: string
+  expects?:     #Inputs
+  targets?:     [...#Consumer] | #Consumer
+  ref?:         #Url
+  ...
 }
 
 // A ContentType describes a file that is found at a given Path.
 #ContentType: #DataType & {
-	path:    #Path
-	tracked: bool
-	...
+  path:    #Path
+  tracked: bool
+  ...
 }
 
-// External types are not strictly defined
-// so the type is open and can also just be a string.
-#ExternalType: {
-	description?: string
-	ref?:         #Url
-	exec?:        string
-} | string
 
-// An environment spec can be implicit as a sub-array,
-// or explicit as a value of `env:`.
-#Environment: *{
-	env: [#EnvVar, ...#EnvVar] | #EnvVar
-} | [#EnvVar, ...#EnvVar]
-
-// The var itself can be defined as a string,
-// or given a description and other properties.
-#EnvVar: {
-	name:         string
-	description?: string
-	...
-} | string
 
 // Path means specifically a file path relative to the repo root.
 // May not be absolute.

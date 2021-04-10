@@ -1,5 +1,5 @@
 Context 'Integration testing'
-  #Skip 'Attempt to correct issues with unit tests'
+  Skip 'Attempt to correct issues with unit tests'
   Context 'schema.cue validates models'
     Parameters:dynamic
       for model in spec/integration/*; do
