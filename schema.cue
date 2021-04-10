@@ -1,3 +1,5 @@
+package describe_repo_schema
+
 // Provided products are the content that a repo is initialized to track.
 // (See `$ man git` -- "the stupid content tracker")
 // At least one product must be specified to be valid.
