@@ -13,7 +13,7 @@ provides: [
   },
   {
     path: "bitbucket-pipelines.yml"
-    target: "Bitbucket Pipelines"
+    targets: "Bitbucket Pipelines"
   }
 ]
 
