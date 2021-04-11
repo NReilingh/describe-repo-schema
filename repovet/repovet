@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-schemadir="$(dirname "$0")"/schema
+schemadir="$(dirname "$(dirname "$0")/$(readlink "$0")")"/schema
 
 if [ -z $1 ]; then
   target=$(ls | grep 'repo\.\w\+' | head -n 1)
