@@ -1,19 +1,4 @@
-package describe_repo_schema
-
-// Provided products are the content that a repo is initialized to track.
-// (See `$ man git` -- "the stupid content tracker")
-// At least one product must be specified to be valid.
-// In the "repo as pure function" metaphor, Products are the "output".
-provides: [#Product, ...#Product] | #Product
-
-// Executions output artifacts that are internal to the repo.
-// Examples might be unit tests or code coverage.
-// They do NOT directly output the repo's products.
-runs?: [...#Execution] | #Execution
-
-// Global consumes -- where to define dependencies for all builds from this repo
-// consumes?: #GlobalInputs
-consumes?: #Inputs
+package repocue
 
 // =============================================================================
 
@@ -72,9 +57,8 @@ consumes?: #Inputs
 // Inputs consumed, in comparison, are not tracked content,
 // but can be nearly anything else.
 #Generator: {
-  build:     #Script
-  source?:   #Sources
-  consumes?: #Inputs
+  build: #Script
+  #Runner
   _type: "Generator"
 }
 
@@ -82,16 +66,21 @@ consumes?: #Inputs
 // except with different nomenclature for the Script type property,
 // and additional properties available for description and yields.
 #Execution: {
-  script:       #Script
+  script: #Script
   description?: string
+  #Runner
+  yields?: #OutputTypes
+  _type: "Execution"
+}
+
+#Runner: {
   source?:      #Sources
   consumes?:    #Inputs
-  yields?:      [...#OutputType] | #OutputType
-  _type: "Execution"
 }
 
 // An OutputType yielded from an execution can also be a stream,
 // for example, TAP (Test Anything Protocol) on stdout.
+#OutputTypes: [...#OutputType] | #OutputType
 #OutputType: #UntrackedContent | *#Stream | #Path
 
 #Stream: {
@@ -104,11 +93,13 @@ consumes?: #Inputs
 
 // Inputs and Consumers are both external types.
 // An input can also be the environment.
-// #GlobalInputs: *[...#GlobalInput] | #GlobalInput
-// #GlobalInput:  #ExternalType | #Environment | #Setup
+#GlobalInputs: *[...#GlobalInput] | #GlobalInput
+#GlobalInput:  #Input | #Setup
 #Inputs: [...#Input] | #Input
 #Input: *(#ExternalType | #Environment) | #UntrackedContent
 
+#Consumers: [...#Consumer] | #Consumer
+#Consumer: #ExternalType
 // External types are not strictly defined
 // so the type is open and can also just be a string.
 #ExternalType: {
@@ -120,6 +111,11 @@ consumes?: #Inputs
   _type: "ExternalType"
   ...
 } | string
+
+#Setup: {
+  setup: #Execution
+  _type: "Setup"
+}
 
 // An environment spec can be implicit as a sub-array,
 // or explicit as a value of `env:`.
@@ -135,14 +131,9 @@ consumes?: #Inputs
 #EnvVar: {
   name:         string
   description?: string
+  _type: "EnvVar"
   ...
 } | string
-
-
-#Consumer: #ExternalType
-#Setup: {
-  setup: #Execution
-}
 
 // DataType is extremely generic and is used to add additional context
 // and requirements to any data object referenced,
@@ -153,7 +144,7 @@ consumes?: #Inputs
 #DataType: {
   description?: string
   expects?: #Inputs
-  targets?: [...#Consumer] | #Consumer
+  targets?: #Consumers
   ref?: #Url
 }
 

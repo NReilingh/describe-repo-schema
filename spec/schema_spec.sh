@@ -11,7 +11,7 @@ Context 'Integration testing'
     End
 
     Specify "$1"
-      When run command cue vet $1 schema.cue -c -v
+      When run command cue vet $1 schema/* -c -v
       The status should equal 0
       The stdout should be blank
       The stderr should be blank
