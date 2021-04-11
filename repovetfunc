@@ -1,9 +1,0 @@
-if [ -z $1 ]; then
-  target=$(ls | grep 'repo\.\w\+' | head -n 1)
-else
-  target=$1
-fi
-
-echo "Vetting $target:"
-cue vet $target ~repos/describe-repo-schema/schema.cue -c -v
-echo "Done"

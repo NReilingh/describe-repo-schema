@@ -1,4 +1,13 @@
 #!/usr/bin/env bash
 
 schemadir="$(dirname "$0")"/schema
-cue vet "$schemadir"/* "$1" -v -c
+
+if [ -z $1 ]; then
+  target=$(ls | grep 'repo\.\w\+' | head -n 1)
+else
+  target=$1
+fi
+
+echo "Vetting $target:"
+cue vet "$schemadir"/* "$target" -v -c
+echo "Done"
