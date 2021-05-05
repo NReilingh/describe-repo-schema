@@ -29,7 +29,7 @@ jobs:
       uses: mislav/bump-homebrew-formula-action@v1
       if: (!github.event.release.prerelease)
       env:
-        COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
+        COMMITTER_TOKEN: ${{ secrets.HOMEBREW_TAP_COMMITTER_TOKEN }}
       with:
         formula-name: repovet
         homebrew-tap: nreilingh/homebrew-tap
