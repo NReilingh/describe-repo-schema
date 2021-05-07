@@ -4,6 +4,10 @@ name: CI
 
 # Controls when the action will run.
 on: [ push, pull_request ]
+  push:
+    branches:
+      - '**'
+  pull_request:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -16,6 +20,8 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+      - name: Complete repovet build
+        run: ./repovet/build.sh
       - name: Install CUE and ShellSpec
         run: brew install cuelang/tap/cue shellspec/shellspec/shellspec
       - name: Run test

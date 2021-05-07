@@ -7,7 +7,11 @@ else
 fi
 
 if [ $1 == "sample" ]; then
-  cat "$supportdir/model-example.cue"
+  if [ $(command -v bat) ]; then
+    bat "$supportdir/model-example.cue" -l go
+  else
+    cat "$supportdir/model-example.cue"
+  fi
   exit 0
 fi
 
