@@ -1,15 +1,13 @@
 #!/usr/bin/env bash
 
 if [ $(readlink "$0") ]; then
-  installdir="$(dirname "$(dirname "$0")/$(readlink "$0")")"
+  supportdir="$(dirname "$(dirname "$0")/$(readlink "$0")")/support"
 else
-  installdir="$(dirname "$0")"
+  supportdir="$(dirname "$0")/support"
 fi
 
-schemadir="$installdir/schema"
-
 if [ $1 == "sample" ]; then
-  cat "$installdir/model-example.cue"
+  cat "$supportdir/model-example.cue"
   exit 0
 fi
 
@@ -20,5 +18,5 @@ else
 fi
 
 echo "Vetting $target:"
-cue vet "$schemadir"/* "$target" -v -c
+cue vet "$supportdir/schema"/* "$target" -v -c
 echo "Done"
