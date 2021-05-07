@@ -1,6 +1,17 @@
 #!/usr/bin/env bash
 
-schemadir="$(dirname "$(dirname "$0")/$(readlink "$0")")"/schema
+if [ $(readlink "$0") ]; then
+  installdir="$(dirname "$(dirname "$0")/$(readlink "$0")")"
+else
+  installdir="$(dirname "$0")"
+fi
+
+schemadir="$installdir/schema"
+
+if [ $1 == "sample" ]; then
+  cat "$installdir/model-example.cue"
+  exit 0
+fi
 
 if [ -z $1 ]; then
   target=$(ls | grep 'repo\.\w\+' | head -n 1)

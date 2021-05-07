@@ -14,6 +14,25 @@ provides: [
   {
     path: "bitbucket-pipelines.yml"
     targets: "Bitbucket Pipelines"
+  },
+  {
+    path: "repovet/dist/"
+    description: "Schema validation CLI tool"
+    from: {
+      build: "repovet/build.sh"
+      source: "repovet/"
+    }
+  },
+  {
+    path: ".github/workflows"
+    descriptions: "GitHub Actions"
+    expects: {
+      env: {
+        name: "HOMEBREW_TAP_COMMITTER_TOKEN"
+        description: "GitHub token with write access to nreilingh/homebrew-tap"
+      }
+    }
+    targets: "GitHub"
   }
 ]
 
