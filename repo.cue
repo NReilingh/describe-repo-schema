@@ -1,4 +1,4 @@
-// https://github.com/NReilingh/describe-repo-schema
+// https://repo.fyi -- coming soon
 
 let CUE = {
   description: "cue"
@@ -7,13 +7,14 @@ let CUE = {
 
 provides: [
   {
-    path: "schema.cue"
+    path: "schema/main.cue"
     description: "Schema Definition"
     targets: CUE
   },
   {
-    path: "bitbucket-pipelines.yml"
-    targets: "Bitbucket Pipelines"
+    path: "spec/integration/*.cue"
+    description: "Model repo.cue examples"
+    targets: CUE
   },
   {
     path: "repovet/dist/"
@@ -21,6 +22,11 @@ provides: [
     from: {
       build: "repovet/build.sh"
       source: "repovet/"
+    }
+    expects: CUE
+    targets: {
+      description: "bash"
+      exec: "./repovet"
     }
   },
   {
@@ -32,7 +38,14 @@ provides: [
         description: "GitHub token with write access to nreilingh/homebrew-tap"
       }
     }
-    targets: "GitHub"
+    targets: [
+      "GitHub",
+      {
+        description: "homebrew"
+        ref: "https://brew.sh"
+        exec: "brew install nreilingh/tap/repovet"
+      }
+    ]
   }
 ]
 
